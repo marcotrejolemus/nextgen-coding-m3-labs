@@ -1,0 +1,316 @@
+{
+  "historia": "HU-01",
+  "casos": [
+    {
+      "id": "CP-01",
+      "escenario": "Registro exitoso de un empleado con datos válidos",
+      "nivel": "api",
+      "precondiciones": [
+        "No existe ningún empleado con correo ana.perez@empresa.com"
+      ],
+      "pasos": [
+        "Enviar POST /api/empleados con nombre, correo, puesto, departamento y fecha_ingreso válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar que el empleado quede registrado con estado 'activo'.",
+        "Verificar que numero_empleado tenga formato EMP-0001."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "El sistema responde 201, el empleado queda con estado 'activo' y se asigna numero_empleado con formato EMP-0001."
+    },
+    {
+      "id": "CP-02",
+      "escenario": "Registro exitoso de un empleado con datos válidos",
+      "nivel": "e2e",
+      "precondiciones": [
+        "No existe ningún empleado con correo ana.perez@empresa.com"
+      ],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'Ana Pérez'.",
+        "Completar data-testid=empleado-correo con 'ana.perez@empresa.com'.",
+        "Completar data-testid=empleado-puesto con 'Analista de Datos'.",
+        "Seleccionar 'Tecnología' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2024-01-15'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-exito."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-exito con el número de empleado asignado (formato EMP-0001)."
+    },
+    {
+      "id": "CP-03",
+      "escenario": "No se permite registrar un empleado con un correo ya registrado",
+      "nivel": "api",
+      "precondiciones": [
+        "Ya existe un empleado registrado con correo ana.perez@empresa.com"
+      ],
+      "pasos": [
+        "Enviar POST /api/empleados con correo 'ANA.PEREZ@EMPRESA.COM' y el resto de datos válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar el mensaje de error en el cuerpo de la respuesta."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ANA.PEREZ@EMPRESA.COM",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "El sistema responde 409 con detail 'El correo ya está registrado'."
+    },
+    {
+      "id": "CP-04",
+      "escenario": "No se permite registrar un empleado con un correo ya registrado",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Ya existe un empleado registrado con correo ana.perez@empresa.com"
+      ],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'Ana Pérez'.",
+        "Completar data-testid=empleado-correo con 'ANA.PEREZ@EMPRESA.COM'.",
+        "Completar data-testid=empleado-puesto con 'Analista de Datos'.",
+        "Seleccionar 'Tecnología' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2024-01-15'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-error."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ANA.PEREZ@EMPRESA.COM",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-error con el texto 'El correo ya está registrado'."
+    },
+    {
+      "id": "CP-05",
+      "escenario": "No se permite registrar un empleado con correo no corporativo",
+      "nivel": "api",
+      "precondiciones": [
+        "No existe ningún empleado con correo ana.perez@gmail.com"
+      ],
+      "pasos": [
+        "Enviar POST /api/empleados con correo 'ana.perez@gmail.com' y el resto de datos válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar el mensaje de error en el cuerpo de la respuesta."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@gmail.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "El sistema responde 422 con detail 'Usa el correo corporativo @empresa.com'."
+    },
+    {
+      "id": "CP-06",
+      "escenario": "No se permite registrar un empleado con correo no corporativo",
+      "nivel": "e2e",
+      "precondiciones": [
+        "No existe ningún empleado con correo ana.perez@gmail.com"
+      ],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'Ana Pérez'.",
+        "Completar data-testid=empleado-correo con 'ana.perez@gmail.com'.",
+        "Completar data-testid=empleado-puesto con 'Analista de Datos'.",
+        "Seleccionar 'Tecnología' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2024-01-15'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-error."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@gmail.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-error con el texto 'Usa el correo corporativo @empresa.com'."
+    },
+    {
+      "id": "CP-07",
+      "escenario": "No se permite registrar un empleado con fecha de ingreso futura",
+      "nivel": "api",
+      "precondiciones": [
+        "La fecha actual del sistema es 2024-06-01"
+      ],
+      "pasos": [
+        "Enviar POST /api/empleados con fecha_ingreso '2999-01-01' y el resto de datos válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar el mensaje de error en el cuerpo de la respuesta."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2999-01-01"
+      },
+      "resultado_esperado": "El sistema responde 422 con detail 'La fecha de ingreso no puede ser futura'."
+    },
+    {
+      "id": "CP-08",
+      "escenario": "No se permite registrar un empleado con fecha de ingreso futura",
+      "nivel": "e2e",
+      "precondiciones": [
+        "La fecha actual del sistema es 2024-06-01"
+      ],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'Ana Pérez'.",
+        "Completar data-testid=empleado-correo con 'ana.perez@empresa.com'.",
+        "Completar data-testid=empleado-puesto con 'Analista de Datos'.",
+        "Seleccionar 'Tecnología' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2999-01-01'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-error."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2999-01-01"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-error con el texto 'La fecha de ingreso no puede ser futura'."
+    },
+    {
+      "id": "CP-09",
+      "escenario": "No se permite registrar un empleado con otros datos inválidos",
+      "nivel": "api",
+      "precondiciones": [],
+      "pasos": [
+        "Enviar POST /api/empleados con nombre 'A' y el resto de datos válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar que el mensaje de error indique el campo 'nombre'."
+      ],
+      "datos": {
+        "nombre": "A",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "El sistema responde 422 indicando que el campo 'nombre' debe corregirse."
+    },
+    {
+      "id": "CP-10",
+      "escenario": "No se permite registrar un empleado con otros datos inválidos",
+      "nivel": "e2e",
+      "precondiciones": [],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'A'.",
+        "Completar data-testid=empleado-correo con 'ana.perez@empresa.com'.",
+        "Completar data-testid=empleado-puesto con 'Analista de Datos'.",
+        "Seleccionar 'Tecnología' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2024-01-15'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-error."
+      ],
+      "datos": {
+        "nombre": "A",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-error indicando que el campo 'nombre' debe corregirse."
+    },
+    {
+      "id": "CP-11",
+      "escenario": "No se permite registrar un empleado con otros datos inválidos",
+      "nivel": "api",
+      "precondiciones": [],
+      "pasos": [
+        "Enviar POST /api/empleados con puesto 'X' y el resto de datos válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar que el mensaje de error indique el campo 'puesto'."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "X",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "El sistema responde 422 indicando que el campo 'puesto' debe corregirse."
+    },
+    {
+      "id": "CP-12",
+      "escenario": "No se permite registrar un empleado con otros datos inválidos",
+      "nivel": "e2e",
+      "precondiciones": [],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'Ana Pérez'.",
+        "Completar data-testid=empleado-correo con 'ana.perez@empresa.com'.",
+        "Completar data-testid=empleado-puesto con 'X'.",
+        "Seleccionar 'Tecnología' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2024-01-15'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-error."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "X",
+        "departamento": "Tecnología",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-error indicando que el campo 'puesto' debe corregirse."
+    },
+    {
+      "id": "CP-13",
+      "escenario": "No se permite registrar un empleado con otros datos inválidos",
+      "nivel": "api",
+      "precondiciones": [],
+      "pasos": [
+        "Enviar POST /api/empleados con departamento 'Marketing' y el resto de datos válidos.",
+        "Verificar el código de respuesta.",
+        "Verificar que el mensaje de error indique el campo 'departamento'."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Marketing",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "El sistema responde 422 indicando que el campo 'departamento' debe corregirse."
+    },
+    {
+      "id": "CP-14",
+      "escenario": "No se permite registrar un empleado con otros datos inválidos",
+      "nivel": "e2e",
+      "precondiciones": [],
+      "pasos": [
+        "Completar data-testid=empleado-nombre con 'Ana Pérez'.",
+        "Completar data-testid=empleado-correo con 'ana.perez@empresa.com'.",
+        "Completar data-testid=empleado-puesto con 'Analista de Datos'.",
+        "Seleccionar 'Marketing' en data-testid=empleado-departamento.",
+        "Completar data-testid=empleado-fecha-ingreso con '2024-01-15'.",
+        "Hacer clic en data-testid=empleado-guardar.",
+        "Verificar el texto de data-testid=mensaje-error."
+      ],
+      "datos": {
+        "nombre": "Ana Pérez",
+        "correo": "ana.perez@empresa.com",
+        "puesto": "Analista de Datos",
+        "departamento": "Marketing",
+        "fecha_ingreso": "2024-01-15"
+      },
+      "resultado_esperado": "Se muestra data-testid=mensaje-error indicando que el campo 'departamento' debe corregirse."
+    }
+  ]
+}

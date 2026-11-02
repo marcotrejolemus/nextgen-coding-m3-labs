@@ -1,8 +1,11 @@
 # Módulo 3 — Laboratorio 1: Arquitectura de agentes
 
+**Estudiante:** Marco Antonio Trejo Lemus
+**Programa:** Next-Gen Coding — Desarrollo de Software con IA Generativa
+**Institución:** Tecnológico de Monterrey
 **Historia de usuario:** HU-01 — Registrar empleado
-**Curso:** Next-Gen Coding · Desarrollo de Software con IA Generativa
-**Estado:** Ejercicios ejecutados; pendiente revisión y commit del entregable.
+**Fecha de ejecución:** 30 de octubre de 2026
+**Estado:** Completado y registrado en Git (commit fadff0c).
 
 ## 1. Evidencias
 

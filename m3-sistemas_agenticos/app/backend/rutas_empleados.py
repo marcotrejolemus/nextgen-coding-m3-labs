@@ -1,6 +1,6 @@
 """Rutas de la API para la gestión de empleados."""
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from database import obtener_db
@@ -34,6 +34,29 @@ def registrar_empleado(datos: EmpleadoCrear, db: Session = Depends(obtener_db)):
     db.commit()
     db.refresh(empleado)
     return empleado
+
+
+@router.get("/empleados", response_model=list[EmpleadoRespuesta])
+def listar_empleados(
+    busqueda: str | None = None,
+    departamento: str | None = None,
+    db: Session = Depends(obtener_db),
+):
+    consulta = db.query(Empleado)
+
+    if busqueda:
+        texto = f"%{busqueda.strip().lower()}%"
+        consulta = consulta.filter(
+            or_(
+                func.lower(Empleado.nombre).like(texto),
+                func.lower(Empleado.correo).like(texto),
+            )
+        )
+
+    if departamento:
+        consulta = consulta.filter(Empleado.departamento == departamento)
+
+    return consulta.order_by(Empleado.id.asc()).all()
 
 
 @router.get("/departamentos")

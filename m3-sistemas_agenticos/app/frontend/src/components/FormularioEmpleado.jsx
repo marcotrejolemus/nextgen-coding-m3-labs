@@ -8,7 +8,7 @@ const VALORES_INICIALES = {
   fecha_ingreso: '',
 }
 
-function FormularioEmpleado() {
+function FormularioEmpleado({ onEmpleadoRegistrado }) {
   const [valores, setValores] = useState(VALORES_INICIALES)
   const [departamentos, setDepartamentos] = useState([])
   const [mensajeExito, setMensajeExito] = useState('')
@@ -44,6 +44,7 @@ function FormularioEmpleado() {
 
     setMensajeExito(`Empleado registrado con número ${datos.numero_empleado}`)
     setValores(VALORES_INICIALES)
+    onEmpleadoRegistrado?.()
   }
 
   return (

@@ -1,5 +1,8 @@
 # Módulo 3 — Laboratorio 2: Diseño de flujos complejos
 
+**Estudiante:** Marco Antonio Trejo Lemus
+**Programa:** Next-Gen Coding — Desarrollo de Software con IA Generativa
+**Institución:** Tecnológico de Monterrey
 **Historia de usuario:** HU-01 — Registrar empleado
 **Fecha de ejecución:** 30 de octubre de 2026
 **Estado:** Aplicación generada y validada manualmente; verificación determinista ejecutada exitosamente después de corregir una incompatibilidad con npm en Windows.

@@ -1,0 +1,240 @@
+{
+  "historia": "HU-02",
+  "casos": [
+    {
+      "id": "CP-01",
+      "escenario": "Camino feliz - ver el directorio completo",
+      "nivel": "api",
+      "precondiciones": [
+        "Existen los empleados EMP-0001 Ana López, EMP-0002 Juan Pérez, EMP-0003 Marta Ruiz (baja) registrados"
+      ],
+      "pasos": [
+        "Enviar GET a /api/empleados sin parámetros de filtro ni búsqueda",
+        "Verificar código de respuesta",
+        "Verificar cantidad y contenido de empleados devueltos"
+      ],
+      "datos": {
+        "metodo": "GET",
+        "url": "/api/empleados"
+      },
+      "resultado_esperado": "Código 200. Se devuelven 3 empleados con numero_empleado, nombre, puesto, departamento y estado: EMP-0001 Ana López Analista Tecnología activo; EMP-0002 Juan Pérez Gerente Ventas activo; EMP-0003 Marta Ruiz Contadora Finanzas baja"
+    },
+    {
+      "id": "CP-02",
+      "escenario": "Camino feliz - ver el directorio completo",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existen los empleados EMP-0001, EMP-0002, EMP-0003 registrados",
+        "El usuario está en la pantalla del directorio de empleados"
+      ],
+      "pasos": [
+        "Abrir la pantalla del directorio de empleados",
+        "No aplicar ningún filtro ni búsqueda",
+        "Verificar que la tabla con data-testid 'tabla-empleados' muestra 3 filas",
+        "Verificar que existen 'fila-empleado-1', 'fila-empleado-2' y 'fila-empleado-3'",
+        "Verificar en cada fila el contenido de 'numero-empleado-1', 'numero-empleado-2', 'numero-empleado-3' y 'estado-empleado-1', 'estado-empleado-2', 'estado-empleado-3'"
+      ],
+      "datos": {
+        "numero-empleado-1": "EMP-0001",
+        "numero-empleado-2": "EMP-0002",
+        "numero-empleado-3": "EMP-0003",
+        "estado-empleado-1": "Activo",
+        "estado-empleado-2": "Activo",
+        "estado-empleado-3": "Baja"
+      },
+      "resultado_esperado": "La tabla 'tabla-empleados' muestra 3 filas con número de empleado, nombre, puesto, departamento y estado correctos para cada empleado"
+    },
+    {
+      "id": "CP-03",
+      "escenario": "Buscar por nombre sin distinguir mayúsculas de minúsculas",
+      "nivel": "api",
+      "precondiciones": [
+        "Existen los empleados EMP-0001 Ana López, EMP-0002 Juan Pérez, EMP-0003 Marta Ruiz registrados"
+      ],
+      "pasos": [
+        "Enviar GET a /api/empleados?busqueda=ANA LÓPEZ",
+        "Verificar código de respuesta",
+        "Verificar cantidad y contenido de empleados devueltos"
+      ],
+      "datos": {
+        "metodo": "GET",
+        "url": "/api/empleados",
+        "busqueda": "ANA LÓPEZ"
+      },
+      "resultado_esperado": "Código 200. Se devuelve 1 empleado: EMP-0001 Ana López Analista Tecnología activo"
+    },
+    {
+      "id": "CP-04",
+      "escenario": "Buscar por nombre sin distinguir mayúsculas de minúsculas",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existen los empleados EMP-0001, EMP-0002, EMP-0003 registrados",
+        "El usuario está en la pantalla del directorio de empleados"
+      ],
+      "pasos": [
+        "Abrir la pantalla del directorio de empleados",
+        "Escribir 'ANA LÓPEZ' en el campo con data-testid 'buscar-empleados'",
+        "Verificar que la tabla 'tabla-empleados' muestra 1 fila",
+        "Verificar que 'fila-empleado-1' contiene 'numero-empleado-1' igual a EMP-0001"
+      ],
+      "datos": {
+        "buscar-empleados": "ANA LÓPEZ"
+      },
+      "resultado_esperado": "Se muestra únicamente la fila de EMP-0001 Ana López Analista Tecnología activo"
+    },
+    {
+      "id": "CP-05",
+      "escenario": "Buscar por correo sin distinguir mayúsculas de minúsculas",
+      "nivel": "api",
+      "precondiciones": [
+        "Existen los empleados EMP-0001 Ana López, EMP-0002 Juan Pérez, EMP-0003 Marta Ruiz registrados"
+      ],
+      "pasos": [
+        "Enviar GET a /api/empleados?busqueda=JUAN.PEREZ@EMPRESA.COM",
+        "Verificar código de respuesta",
+        "Verificar cantidad y contenido de empleados devueltos"
+      ],
+      "datos": {
+        "metodo": "GET",
+        "url": "/api/empleados",
+        "busqueda": "JUAN.PEREZ@EMPRESA.COM"
+      },
+      "resultado_esperado": "Código 200. Se devuelve 1 empleado: EMP-0002 Juan Pérez Gerente Ventas activo"
+    },
+    {
+      "id": "CP-06",
+      "escenario": "Buscar por correo sin distinguir mayúsculas de minúsculas",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existen los empleados EMP-0001, EMP-0002, EMP-0003 registrados",
+        "El usuario está en la pantalla del directorio de empleados"
+      ],
+      "pasos": [
+        "Abrir la pantalla del directorio de empleados",
+        "Escribir 'JUAN.PEREZ@EMPRESA.COM' en el campo con data-testid 'buscar-empleados'",
+        "Verificar que la tabla 'tabla-empleados' muestra 1 fila",
+        "Verificar que 'fila-empleado-2' contiene 'numero-empleado-2' igual a EMP-0002"
+      ],
+      "datos": {
+        "buscar-empleados": "JUAN.PEREZ@EMPRESA.COM"
+      },
+      "resultado_esperado": "Se muestra únicamente la fila de EMP-0002 Juan Pérez Gerente Ventas activo"
+    },
+    {
+      "id": "CP-07",
+      "escenario": "Filtrar por departamento",
+      "nivel": "api",
+      "precondiciones": [
+        "Existen los empleados EMP-0001 Ana López, EMP-0002 Juan Pérez, EMP-0003 Marta Ruiz registrados"
+      ],
+      "pasos": [
+        "Enviar GET a /api/empleados?departamento=Finanzas",
+        "Verificar código de respuesta",
+        "Verificar cantidad y contenido de empleados devueltos"
+      ],
+      "datos": {
+        "metodo": "GET",
+        "url": "/api/empleados",
+        "departamento": "Finanzas"
+      },
+      "resultado_esperado": "Código 200. Se devuelve 1 empleado: EMP-0003 Marta Ruiz Contadora Finanzas baja"
+    },
+    {
+      "id": "CP-08",
+      "escenario": "Filtrar por departamento",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existen los empleados EMP-0001, EMP-0002, EMP-0003 registrados",
+        "El usuario está en la pantalla del directorio de empleados"
+      ],
+      "pasos": [
+        "Abrir la pantalla del directorio de empleados",
+        "Seleccionar 'Finanzas' en el selector con data-testid 'filtro-departamento'",
+        "Verificar que la tabla 'tabla-empleados' muestra 1 fila",
+        "Verificar que 'fila-empleado-3' contiene 'numero-empleado-3' igual a EMP-0003"
+      ],
+      "datos": {
+        "filtro-departamento": "Finanzas"
+      },
+      "resultado_esperado": "Se muestra únicamente la fila de EMP-0003 Marta Ruiz Contadora Finanzas baja"
+    },
+    {
+      "id": "CP-09",
+      "escenario": "Buscar un texto que no coincide con ningún empleado",
+      "nivel": "api",
+      "precondiciones": [
+        "Existen los empleados EMP-0001, EMP-0002, EMP-0003 registrados"
+      ],
+      "pasos": [
+        "Enviar GET a /api/empleados?busqueda=xyz-sin-coincidencias",
+        "Verificar código de respuesta",
+        "Verificar que la lista devuelta está vacía"
+      ],
+      "datos": {
+        "metodo": "GET",
+        "url": "/api/empleados",
+        "busqueda": "xyz-sin-coincidencias"
+      },
+      "resultado_esperado": "Código 200. Se devuelve una lista vacía de empleados"
+    },
+    {
+      "id": "CP-10",
+      "escenario": "Buscar un texto que no coincide con ningún empleado",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existen los empleados EMP-0001, EMP-0002, EMP-0003 registrados",
+        "El usuario está en la pantalla del directorio de empleados"
+      ],
+      "pasos": [
+        "Abrir la pantalla del directorio de empleados",
+        "Escribir 'xyz-sin-coincidencias' en el campo con data-testid 'buscar-empleados'",
+        "Verificar que se muestra el elemento con data-testid 'sin-resultados' con el mensaje 'No se encontraron resultados'",
+        "Verificar que la tabla 'tabla-empleados' no contiene ninguna fila 'fila-empleado-*'"
+      ],
+      "datos": {
+        "buscar-empleados": "xyz-sin-coincidencias",
+        "sin-resultados": "No se encontraron resultados"
+      },
+      "resultado_esperado": "Se muestra el mensaje 'No se encontraron resultados' en 'sin-resultados' y no hay filas de empleados en la tabla"
+    },
+    {
+      "id": "CP-11",
+      "escenario": "Los empleados dados de baja siguen apareciendo en el directorio",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0003 Marta Ruiz con estado baja registrado"
+      ],
+      "pasos": [
+        "Enviar GET a /api/empleados sin parámetros de filtro ni búsqueda",
+        "Verificar código de respuesta",
+        "Verificar que el empleado EMP-0003 Marta Ruiz aparece en la lista con estado baja y conserva numero_empleado, nombre, puesto y departamento"
+      ],
+      "datos": {
+        "metodo": "GET",
+        "url": "/api/empleados"
+      },
+      "resultado_esperado": "Código 200. El empleado EMP-0003 Marta Ruiz Contadora Finanzas aparece en la lista con estado 'baja'"
+    },
+    {
+      "id": "CP-12",
+      "escenario": "Los empleados dados de baja siguen apareciendo en el directorio",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existe el empleado EMP-0003 Marta Ruiz con estado baja registrado",
+        "El usuario está en la pantalla del directorio de empleados"
+      ],
+      "pasos": [
+        "Abrir la pantalla del directorio de empleados",
+        "No aplicar ningún filtro ni búsqueda",
+        "Verificar que 'fila-empleado-3' está presente en 'tabla-empleados'",
+        "Verificar que 'estado-empleado-3' muestra el texto 'Baja'",
+        "Verificar que 'numero-empleado-3' muestra 'EMP-0003' y que la fila conserva nombre, puesto y departamento"
+      ],
+      "datos": {
+        "numero-empleado-3": "EMP-0003",
+        "estado-empleado-3": "Baja"
+      },
+      "resultado_esperado": "La fila de Marta Ruiz se muestra con estado 'Baja' y conserva número de empleado, nombre, puesto y departamento"
+    }
+  ]
+}

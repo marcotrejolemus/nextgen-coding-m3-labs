@@ -12,6 +12,20 @@ DEPARTAMENTOS_VALIDOS = [
 ]
 
 
+def _validar_puesto(valor: str) -> str:
+    if not (2 <= len(valor.strip()) <= 60):
+        raise ValueError("El puesto debe tener entre 2 y 60 caracteres")
+    return valor.strip()
+
+
+def _validar_departamento(valor: str) -> str:
+    if valor not in DEPARTAMENTOS_VALIDOS:
+        raise ValueError(
+            "El departamento debe ser uno de: " + ", ".join(DEPARTAMENTOS_VALIDOS)
+        )
+    return valor
+
+
 class EmpleadoCrear(BaseModel):
     nombre: str
     correo: str
@@ -26,12 +40,7 @@ class EmpleadoCrear(BaseModel):
             raise ValueError("El nombre debe tener entre 2 y 80 caracteres")
         return valor.strip()
 
-    @field_validator("puesto")
-    @classmethod
-    def validar_puesto(cls, valor: str) -> str:
-        if not (2 <= len(valor.strip()) <= 60):
-            raise ValueError("El puesto debe tener entre 2 y 60 caracteres")
-        return valor.strip()
+    _validar_puesto = field_validator("puesto")(_validar_puesto)
 
     @field_validator("correo")
     @classmethod
@@ -41,14 +50,7 @@ class EmpleadoCrear(BaseModel):
             raise ValueError("Usa el correo corporativo @empresa.com")
         return valor
 
-    @field_validator("departamento")
-    @classmethod
-    def validar_departamento(cls, valor: str) -> str:
-        if valor not in DEPARTAMENTOS_VALIDOS:
-            raise ValueError(
-                "El departamento debe ser uno de: " + ", ".join(DEPARTAMENTOS_VALIDOS)
-            )
-        return valor
+    _validar_departamento = field_validator("departamento")(_validar_departamento)
 
     @field_validator("fecha_ingreso")
     @classmethod
@@ -56,6 +58,21 @@ class EmpleadoCrear(BaseModel):
         if valor > date.today():
             raise ValueError("La fecha de ingreso no puede ser futura")
         return valor
+
+
+class EmpleadoActualizar(BaseModel):
+    """Edición de puesto y departamento. numero_empleado y correo no se incluyen
+    aquí para que, si llegan en el body, Pydantic los ignore sin error (HU-03)."""
+
+    puesto: str
+    departamento: str
+
+    _validar_puesto = field_validator("puesto")(_validar_puesto)
+    _validar_departamento = field_validator("departamento")(_validar_departamento)
+
+
+class EmpleadoBaja(BaseModel):
+    fecha_baja: date
 
 
 class EmpleadoRespuesta(BaseModel):

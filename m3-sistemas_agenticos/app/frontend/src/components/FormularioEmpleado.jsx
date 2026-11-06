@@ -8,8 +8,11 @@ const VALORES_INICIALES = {
   fecha_ingreso: '',
 }
 
-function FormularioEmpleado({ onEmpleadoRegistrado }) {
-  const [valores, setValores] = useState(VALORES_INICIALES)
+function FormularioEmpleado({ modo = 'crear', empleadoInicial, onGuardado, onCancelar }) {
+  const esEdicion = modo === 'editar'
+  const [valores, setValores] = useState(
+    esEdicion && empleadoInicial ? { ...VALORES_INICIALES, ...empleadoInicial } : VALORES_INICIALES
+  )
   const [departamentos, setDepartamentos] = useState([])
   const [mensajeExito, setMensajeExito] = useState('')
   const [mensajeError, setMensajeError] = useState('')
@@ -21,6 +24,12 @@ function FormularioEmpleado({ onEmpleadoRegistrado }) {
       .catch(() => setDepartamentos([]))
   }, [])
 
+  useEffect(() => {
+    if (esEdicion && empleadoInicial) {
+      setValores({ ...VALORES_INICIALES, ...empleadoInicial })
+    }
+  }, [esEdicion, empleadoInicial])
+
   const actualizarCampo = (campo) => (evento) => {
     setValores((anteriores) => ({ ...anteriores, [campo]: evento.target.value }))
   }
@@ -30,10 +39,15 @@ function FormularioEmpleado({ onEmpleadoRegistrado }) {
     setMensajeExito('')
     setMensajeError('')
 
-    const response = await fetch('/api/empleados', {
-      method: 'POST',
+    const url = esEdicion ? `/api/empleados/${empleadoInicial.id}` : '/api/empleados'
+    const body = esEdicion
+      ? { puesto: valores.puesto, departamento: valores.departamento }
+      : valores
+
+    const response = await fetch(url, {
+      method: esEdicion ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(valores),
+      body: JSON.stringify(body),
     })
     const datos = await response.json()
 
@@ -42,9 +56,15 @@ function FormularioEmpleado({ onEmpleadoRegistrado }) {
       return
     }
 
-    setMensajeExito(`Empleado registrado con número ${datos.numero_empleado}`)
-    setValores(VALORES_INICIALES)
-    onEmpleadoRegistrado?.()
+    setMensajeExito(
+      esEdicion
+        ? 'Empleado actualizado correctamente'
+        : `Empleado registrado con número ${datos.numero_empleado}`
+    )
+    if (!esEdicion) {
+      setValores(VALORES_INICIALES)
+    }
+    onGuardado?.(datos)
   }
 
   return (
@@ -55,6 +75,7 @@ function FormularioEmpleado({ onEmpleadoRegistrado }) {
           data-testid="empleado-nombre"
           value={valores.nombre}
           onChange={actualizarCampo('nombre')}
+          disabled={esEdicion}
         />
       </label>
       <label>
@@ -63,6 +84,7 @@ function FormularioEmpleado({ onEmpleadoRegistrado }) {
           data-testid="empleado-correo"
           value={valores.correo}
           onChange={actualizarCampo('correo')}
+          disabled={esEdicion}
         />
       </label>
       <label>
@@ -95,11 +117,17 @@ function FormularioEmpleado({ onEmpleadoRegistrado }) {
           data-testid="empleado-fecha-ingreso"
           value={valores.fecha_ingreso}
           onChange={actualizarCampo('fecha_ingreso')}
+          disabled={esEdicion}
         />
       </label>
       <button type="submit" data-testid="empleado-guardar">
         Guardar
       </button>
+      {esEdicion && onCancelar && (
+        <button type="button" onClick={onCancelar}>
+          Cancelar
+        </button>
+      )}
       {mensajeExito && <p data-testid="mensaje-exito">{mensajeExito}</p>}
       {mensajeError && <p data-testid="mensaje-error">{mensajeError}</p>}
     </form>

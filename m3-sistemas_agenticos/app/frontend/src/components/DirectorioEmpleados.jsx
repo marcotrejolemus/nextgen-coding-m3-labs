@@ -5,7 +5,7 @@ const ESTADO_TEXTO = {
   baja: 'Baja',
 }
 
-function DirectorioEmpleados({ refrescar }) {
+function DirectorioEmpleados({ refrescar, onEditar, onBaja }) {
   const [empleados, setEmpleados] = useState([])
   const [departamentos, setDepartamentos] = useState([])
   const [cargando, setCargando] = useState(false)
@@ -75,6 +75,7 @@ function DirectorioEmpleados({ refrescar }) {
               <th>Puesto</th>
               <th>Departamento</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -86,6 +87,20 @@ function DirectorioEmpleados({ refrescar }) {
                 <td>{empleado.departamento}</td>
                 <td data-testid={`estado-empleado-${empleado.id}`}>
                   {ESTADO_TEXTO[empleado.estado] ?? empleado.estado}
+                </td>
+                <td>
+                  <button
+                    data-testid={`editar-empleado-${empleado.id}`}
+                    onClick={() => onEditar?.(empleado)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    data-testid={`baja-empleado-${empleado.id}`}
+                    onClick={() => onBaja?.(empleado)}
+                  >
+                    Dar de baja
+                  </button>
                 </td>
               </tr>
             ))}

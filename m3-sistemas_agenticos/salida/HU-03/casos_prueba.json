@@ -1,0 +1,236 @@
+{
+  "historia": "HU-03",
+  "casos": [
+    {
+      "id": "CP-01",
+      "escenario": "Editar puesto y departamento de un empleado activo",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0007 con puesto 'Analista', departamento 'Ventas' y estado 'activo'"
+      ],
+      "pasos": [
+        "Enviar PUT /api/empleados/EMP-0007 con body {puesto: 'Analista Senior', departamento: 'Tecnología'}",
+        "Verificar que la respuesta tiene código 200",
+        "Enviar GET /api/empleados/EMP-0007",
+        "Verificar que puesto es 'Analista Senior' y departamento es 'Tecnología'"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0007",
+        "puesto_anterior": "Analista",
+        "departamento_anterior": "Ventas",
+        "puesto_nuevo": "Analista Senior",
+        "departamento_nuevo": "Tecnología"
+      },
+      "resultado_esperado": "El sistema responde 200 y el empleado EMP-0007 queda con puesto 'Analista Senior' y departamento 'Tecnología'"
+    },
+    {
+      "id": "CP-02",
+      "escenario": "Editar puesto y departamento de un empleado activo",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existe el empleado EMP-0007 con puesto 'Analista', departamento 'Ventas' y estado 'activo'",
+        "El directorio de empleados está visible en pantalla"
+      ],
+      "pasos": [
+        "Localizar la fila fila-empleado-EMP-0007 en tabla-empleados",
+        "Hacer clic en editar-empleado-EMP-0007",
+        "Escribir 'Analista Senior' en el campo empleado-puesto",
+        "Seleccionar 'Tecnología' en el campo empleado-departamento",
+        "Hacer clic en empleado-guardar",
+        "Verificar que se muestra mensaje-exito",
+        "Verificar que la fila fila-empleado-EMP-0007 refleja puesto 'Analista Senior' y departamento 'Tecnología'"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0007",
+        "puesto_nuevo": "Analista Senior",
+        "departamento_nuevo": "Tecnología"
+      },
+      "resultado_esperado": "La pantalla muestra mensaje de éxito y el directorio refleja los nuevos datos del empleado EMP-0007"
+    },
+    {
+      "id": "CP-03",
+      "escenario": "Dar de baja a un empleado activo",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0008 con estado 'activo' y fecha_ingreso '2022-01-10'"
+      ],
+      "pasos": [
+        "Enviar PATCH /api/empleados/EMP-0008 con body {estado: 'baja', fecha_baja: '2024-05-01'}",
+        "Verificar que la respuesta tiene código 200",
+        "Enviar GET /api/empleados/EMP-0008",
+        "Verificar que estado es 'baja' y fecha_baja es '2024-05-01'",
+        "Enviar GET /api/empleados",
+        "Verificar que EMP-0008 aparece en la lista devuelta"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0008",
+        "fecha_ingreso": "2022-01-10",
+        "fecha_baja": "2024-05-01"
+      },
+      "resultado_esperado": "El sistema responde 200, el empleado EMP-0008 queda en estado 'baja' con fecha_baja '2024-05-01' y sigue apareciendo en el directorio"
+    },
+    {
+      "id": "CP-04",
+      "escenario": "Dar de baja a un empleado activo",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existe el empleado EMP-0008 con estado 'activo' y fecha_ingreso '2022-01-10'",
+        "El directorio de empleados está visible en pantalla"
+      ],
+      "pasos": [
+        "Localizar la fila fila-empleado-EMP-0008 en tabla-empleados",
+        "Hacer clic en baja-empleado-EMP-0008",
+        "Escribir '2024-05-01' en el campo empleado-fecha-baja",
+        "Hacer clic en confirmar-baja",
+        "Verificar que se muestra mensaje-exito",
+        "Verificar que estado-empleado-EMP-0008 muestra 'Baja'",
+        "Verificar que fila-empleado-EMP-0008 sigue presente en tabla-empleados"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0008",
+        "fecha_baja": "2024-05-01"
+      },
+      "resultado_esperado": "La pantalla muestra mensaje de éxito, el estado del empleado cambia a 'Baja' y sigue apareciendo en el directorio"
+    },
+    {
+      "id": "CP-05",
+      "escenario": "No editar el número de empleado ni el correo",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0009 con numero_empleado 'EMP-0009' y correo 'ana.perez@empresa.com'"
+      ],
+      "pasos": [
+        "Enviar PUT /api/empleados/EMP-0009 con body {numero_empleado: 'EMP-9999', correo: 'nuevo@empresa.com'}",
+        "Verificar que la respuesta tiene código 200",
+        "Enviar GET /api/empleados/EMP-0009",
+        "Verificar que numero_empleado sigue siendo 'EMP-0009' y correo sigue siendo 'ana.perez@empresa.com'"
+      ],
+      "datos": {
+        "numero_empleado_original": "EMP-0009",
+        "correo_original": "ana.perez@empresa.com",
+        "numero_empleado_enviado": "EMP-9999",
+        "correo_enviado": "nuevo@empresa.com"
+      },
+      "resultado_esperado": "El sistema responde 200 y el empleado conserva numero_empleado 'EMP-0009' y correo 'ana.perez@empresa.com'"
+    },
+    {
+      "id": "CP-06",
+      "escenario": "Error al editar un empleado dado de baja",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0010 con estado 'baja'"
+      ],
+      "pasos": [
+        "Enviar PUT /api/empleados/EMP-0010 con body {puesto: 'Gerente'}",
+        "Verificar que la respuesta tiene código 409",
+        "Verificar que el body de la respuesta contiene detail 'No se puede editar a un empleado dado de baja'"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0010",
+        "puesto_nuevo": "Gerente"
+      },
+      "resultado_esperado": "El sistema responde 409 con el mensaje 'No se puede editar a un empleado dado de baja'"
+    },
+    {
+      "id": "CP-07",
+      "escenario": "Error al editar un empleado dado de baja",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existe el empleado EMP-0010 con estado 'baja'",
+        "El directorio de empleados está visible en pantalla"
+      ],
+      "pasos": [
+        "Localizar la fila fila-empleado-EMP-0010 con estado-empleado-EMP-0010 mostrando 'Baja'",
+        "Hacer clic en editar-empleado-EMP-0010",
+        "Escribir 'Gerente' en el campo empleado-puesto",
+        "Hacer clic en empleado-guardar",
+        "Verificar que se muestra mensaje-error con el texto 'No se puede editar a un empleado dado de baja'"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0010",
+        "puesto_nuevo": "Gerente"
+      },
+      "resultado_esperado": "La pantalla muestra mensaje-error indicando que no se puede editar a un empleado dado de baja"
+    },
+    {
+      "id": "CP-08",
+      "escenario": "Error al editar con un departamento no permitido",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0011 con estado 'activo' y departamento 'Finanzas'"
+      ],
+      "pasos": [
+        "Enviar PUT /api/empleados/EMP-0011 con body {departamento: 'Marketing'}",
+        "Verificar que la respuesta tiene código 422"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0011",
+        "departamento_anterior": "Finanzas",
+        "departamento_nuevo": "Marketing"
+      },
+      "resultado_esperado": "El sistema responde 422 por departamento no permitido"
+    },
+    {
+      "id": "CP-09",
+      "escenario": "Error al editar con un departamento no permitido",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existe el empleado EMP-0011 con estado 'activo' y departamento 'Finanzas'",
+        "El directorio de empleados está visible en pantalla"
+      ],
+      "pasos": [
+        "Localizar la fila fila-empleado-EMP-0011 en tabla-empleados",
+        "Hacer clic en editar-empleado-EMP-0011",
+        "Escribir 'Marketing' en el campo empleado-departamento",
+        "Hacer clic en empleado-guardar",
+        "Verificar que se muestra mensaje-error indicando que el campo departamento debe corregirse"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0011",
+        "departamento_nuevo": "Marketing"
+      },
+      "resultado_esperado": "La pantalla indica mediante mensaje-error que el campo 'departamento' debe corregirse"
+    },
+    {
+      "id": "CP-10",
+      "escenario": "Error al dar de baja con una fecha de baja anterior a la fecha de ingreso",
+      "nivel": "api",
+      "precondiciones": [
+        "Existe el empleado EMP-0012 con estado 'activo' y fecha_ingreso '2023-03-01'"
+      ],
+      "pasos": [
+        "Enviar PATCH /api/empleados/EMP-0012 con body {estado: 'baja', fecha_baja: '2023-01-15'}",
+        "Verificar que la respuesta tiene código 422",
+        "Verificar que el body de la respuesta contiene detail 'La fecha de baja no puede ser anterior a la fecha de ingreso'"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0012",
+        "fecha_ingreso": "2023-03-01",
+        "fecha_baja": "2023-01-15"
+      },
+      "resultado_esperado": "El sistema responde 422 con el mensaje 'La fecha de baja no puede ser anterior a la fecha de ingreso'"
+    },
+    {
+      "id": "CP-11",
+      "escenario": "Error al dar de baja con una fecha de baja anterior a la fecha de ingreso",
+      "nivel": "e2e",
+      "precondiciones": [
+        "Existe el empleado EMP-0012 con estado 'activo' y fecha_ingreso '2023-03-01'",
+        "El directorio de empleados está visible en pantalla"
+      ],
+      "pasos": [
+        "Localizar la fila fila-empleado-EMP-0012 en tabla-empleados",
+        "Hacer clic en baja-empleado-EMP-0012",
+        "Escribir '2023-01-15' en el campo empleado-fecha-baja",
+        "Hacer clic en confirmar-baja",
+        "Verificar que se muestra mensaje-error con el texto 'La fecha de baja no puede ser anterior a la fecha de ingreso'"
+      ],
+      "datos": {
+        "numero_empleado": "EMP-0012",
+        "fecha_ingreso": "2023-03-01",
+        "fecha_baja": "2023-01-15"
+      },
+      "resultado_esperado": "La pantalla muestra mensaje-error indicando que la fecha de baja no puede ser anterior a la fecha de ingreso"
+    }
+  ]
+}

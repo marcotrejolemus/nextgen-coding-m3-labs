@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FormularioEmpleado from './components/FormularioEmpleado.jsx'
 import FormularioBaja from './components/FormularioBaja.jsx'
+import FormularioVacaciones from './components/FormularioVacaciones.jsx'
 import DirectorioEmpleados from './components/DirectorioEmpleados.jsx'
 
 function App() {
@@ -40,6 +41,11 @@ const manejarGuardado = () => {
     setPanelActivo('baja')
   }
 
+  const manejarVacaciones = (empleado) => {
+    setEmpleadoSeleccionado(empleado)
+    setPanelActivo('vacaciones')
+  }
+
   return (
     <div>
       <h1>Gestión de empleados</h1>
@@ -66,7 +72,15 @@ const manejarGuardado = () => {
           onCancelar={volverACrear}
         />
       )}
-      <DirectorioEmpleados refrescar={refreshKey} onEditar={manejarEditar} onBaja={manejarBaja} />
+      {panelActivo === 'vacaciones' && empleadoSeleccionado && (
+        <FormularioVacaciones empleado={empleadoSeleccionado} onCerrar={volverACrear} />
+      )}
+      <DirectorioEmpleados
+        refrescar={refreshKey}
+        onEditar={manejarEditar}
+        onBaja={manejarBaja}
+        onVacaciones={manejarVacaciones}
+      />
     </div>
   )
 }

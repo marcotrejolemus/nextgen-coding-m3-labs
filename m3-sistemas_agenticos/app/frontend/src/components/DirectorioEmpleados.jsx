@@ -5,7 +5,7 @@ const ESTADO_TEXTO = {
   baja: 'Baja',
 }
 
-function DirectorioEmpleados({ refrescar, onEditar, onBaja }) {
+function DirectorioEmpleados({ refrescar, onEditar, onBaja, onVacaciones }) {
   const [empleados, setEmpleados] = useState([])
   const [departamentos, setDepartamentos] = useState([])
   const [cargando, setCargando] = useState(false)
@@ -101,6 +101,14 @@ function DirectorioEmpleados({ refrescar, onEditar, onBaja }) {
                   >
                     Dar de baja
                   </button>
+                  {empleado.estado === 'activo' && (
+                    <button
+                      data-testid={`vacaciones-abrir-${empleado.id}`}
+                      onClick={() => onVacaciones?.(empleado)}
+                    >
+                      Solicitar vacaciones
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

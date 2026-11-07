@@ -42,6 +42,30 @@ def crear_empleado(url_api):
 
 
 @pytest.fixture
+def registrar_vacacion():
+    """Inserta una solicitud de vacaciones directamente en la base de datos.
+
+    Sirve para preparar precondiciones de HU-10 (saldo ya usado en el año)
+    sin depender del endpoint de creación, que es justamente lo que prueban
+    los casos de esta historia.
+    """
+
+    def _registrar(empleado_id: int, fecha_inicio: str, fecha_fin: str, dias_habiles: int) -> None:
+        conexion = sqlite3.connect(RUTA_BASE_DATOS)
+        try:
+            conexion.execute(
+                "INSERT INTO vacaciones (empleado_id, fecha_inicio, fecha_fin, dias_habiles) "
+                "VALUES (?, ?, ?, ?)",
+                (empleado_id, fecha_inicio, fecha_fin, dias_habiles),
+            )
+            conexion.commit()
+        finally:
+            conexion.close()
+
+    return _registrar
+
+
+@pytest.fixture
 def marcar_empleado_baja():
     """Marca un empleado como baja escribiendo directamente en la base de datos.
 
